@@ -1,18 +1,25 @@
+import java.util.Vector;
+
 public class Method {
-    public VectorOperations multiply(VectorOperations vector) {
-        if (vector.size() != diagonals.size()) {
-            throw new IllegalArgumentException("Vector size must match matrix dimensions");
+    public static VectorOperations solve(VectorOperations a, VectorOperations b, VectorOperations c, VectorOperations d) {
+        int n = d.size();
+        VectorOperations l = new VectorOperations(n);
+        VectorOperations m = new VectorOperations(n);
+        VectorOperations x = new VectorOperations(n);
+
+        l.set(1, c.get(1) / b.get(1));
+        m.set(1, d.get(1) / b.get(1));
+
+        for (int i = 2; i <= n; i++) {
+            l.set(i, c.get(i) / (b.get(i) - a.get(i) * l.get(i - 1)));
+            m.set(i, (d.get(i) - a.get(i) * m.get(i - 1)) / (b.get(i) - a.get(i) * l.get(i - 1)));
         }
-        CustomVector result = new CustomVector(vector.size());
-        for (int i = 1; i <= vector.size(); i++) {
-            if (i > 1) {
-                result.elements.set(i - 1, result.get(i) + diagonals.get(i).get(i - 1) * vector.get(i - 1)); // Нижняя диагональ
-            }
-            result.elements.set(i - 1, result.get(i) + diagonals.get(i + 1).get(i - 1) * vector.get(i - 1)); // Главная диагональ
-            if (i < vector.size()) {
-                result.elements.set(i - 1, result.get(i) + diagonals.get(i + 2).get(i - 1) * vector.get(i)); // Верхняя диагональ
-            }
+
+        x.set(n, m.get(n));
+        for (int i = n - 1; i >= 1; i--) {
+            x.set(i, m.get(i) - l.get(i) * x.get(i + 1));
         }
-        return result;
+
+        return x;
     }
 }

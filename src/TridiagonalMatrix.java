@@ -1,44 +1,61 @@
 import java.util.Vector;
 
 public class TridiagonalMatrix {
-    private Vector<VectorOperations> diagonals;
+    private Vector<VectorOperations> vectors;
 
     public TridiagonalMatrix(int size) {
         for (int i = 0; i < size; i++) {
-            diagonals.add(new VectorOperations(size));
+            vectors.add(new VectorOperations(size));
         }
     }
 
-    public void setLowerDiagonal(int index, double value) {
-        diagonals.get(index).getVector().set(index - 1, value);
-    }
-
-    public void setMainDiagonal(int index, double value) {
-        diagonals.get(index + 1).getVector().set(index - 1, value);
-    }
-
-    public void setUpperDiagonal(int index, double value) {
-        diagonals.get(index + 2).getVector().set(index - 1, value);
-    }
-
     public VectorOperations multiplication(VectorOperations vector) {
-        if (vector.size() != diagonals.size()) {
+        if (vector.size() != vectors.size()) {
             throw new IllegalArgumentException("Vector size must match matrix size");
         }
         VectorOperations result = new VectorOperations(vector.size());
         for (int i = 1; i <= vector.size(); i++) {
-            if (i > 1) {
-                result.getVector().set(i - 1, result.get(i) + diagonals.get(i).get(i - 1) * vector.get(i - 1));
-            }
-            result.getVector().set(i - 1, result.get(i) + diagonals.get(i + 1).get(i - 1) * vector.get(i - 1));
-            if (i < vector.size()) {
-                result.getVector().set(i - 1, result.get(i) + diagonals.get(i + 2).get(i - 1) * vector.get(i));
+            if (i == 1) {
+                result.getVector().set(i, result.get(i) + vectors.get(i).get(i) * vector.get(i));
+                result.getVector().set(i, result.get(i) + vectors.get(i).get(i + 1) * vector.get(i + 1));
+            } else if (i == vector.size()) {
+                result.getVector().set(i, result.get(i) + vectors.get(i).get(i - 1) * vector.get(i - 1));
+                result.getVector().set(i, result.get(i) + vectors.get(i).get(i) * vector.get(i));
+            } else {
+                for (int j = i - 1; j <= i + 1; j++) {
+                    result.getVector().set(i, result.get(i) + vectors.get(i).get(j) * vector.get(i));
+                }
             }
         }
         return result;
     }
 
-    public Vector<VectorOperations> getDiagonals() {
-        return diagonals;
+    public Vector<VectorOperations> getVectors() {
+        return vectors;
     }
+
+    public VectorOperations getMainDiagonal() {
+        VectorOperations mainDiag = new VectorOperations(vectors.size());
+        for (int i = 1; i <= mainDiag.size(); i++) {
+            mainDiag.getVector().set(i, vectors.get(i).get(i));
+        }
+        return mainDiag;
+    }
+
+    public VectorOperations getHighDiagonal() {
+        VectorOperations highDiag = new VectorOperations(vectors.size() - 1);
+        for (int i = 1; i <= highDiag.size(); i++) {
+            highDiag.getVector().set(i, vectors.get(i).get(i + 1));
+        }
+        return highDiag;
+    }
+
+    public VectorOperations getBelowDiagonal() {
+        VectorOperations belowDiag = new VectorOperations(vectors.size() - 1);
+        for (int i = 1; i <= belowDiag.size(); i++) {
+            belowDiag.getVector().set(i, vectors.get(i).get(i - 1));
+        }
+        return belowDiag;
+    }
+
 }
