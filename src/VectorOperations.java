@@ -3,7 +3,7 @@ import java.util.Vector;
 import java.util.Random;
 
 public class VectorOperations {
-    private Vector<Double> elements;
+    private final Vector<Double> elements;
 
     public VectorOperations(int size) {
         elements = new Vector<>(size);
@@ -12,14 +12,16 @@ public class VectorOperations {
         }
     }
 
+    public double getMaxElem() {
+        return Collections.max(elements);
+    }
+
     public void fillRandom(double start, double end) {
         Random rand = new Random();
         for (int i = 0; i < elements.size(); i++) {
             elements.set(i, rand.nextDouble() * (end - start) + start);
         }
     }
-
-    public double maxElem = Collections.max(elements);
 
     public VectorOperations addition(VectorOperations other) {
         if (this.elements.size() != other.elements.size()) {

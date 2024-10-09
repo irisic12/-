@@ -7,9 +7,9 @@ public class Main {
         System.out.println("Enter the size of the matrix:");
         int size = scanner.nextInt();
 
-        TridiagonalMatrix tridiagonalMatrix = new TridiagonalMatrix(size);
+        TridiagonalMatrix tridiagonalMatrix = new TridiagonalMatrix(size + 1);
         for(int i = 1; i <= size; i++) {
-            tridiagonalMatrix.getVectors().get(i).fillRandom(-10,10);
+            tridiagonalMatrix.getVectors().get(i-1).fillRandom(-10,10);
         }
 
         System.out.println("Matrix elements:");

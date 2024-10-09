@@ -4,6 +4,7 @@ public class TridiagonalMatrix {
     private Vector<VectorOperations> vectors;
 
     public TridiagonalMatrix(int size) {
+        vectors = new Vector<>();
         for (int i = 0; i < size; i++) {
             vectors.add(new VectorOperations(size));
         }
@@ -37,7 +38,7 @@ public class TridiagonalMatrix {
     public VectorOperations getMainDiagonal() {
         VectorOperations mainDiag = new VectorOperations(vectors.size());
         for (int i = 1; i <= mainDiag.size(); i++) {
-            mainDiag.getVector().set(i, vectors.get(i).get(i));
+            mainDiag.set(i, vectors.get(i-1).get(i));
         }
         return mainDiag;
     }
@@ -45,7 +46,7 @@ public class TridiagonalMatrix {
     public VectorOperations getHighDiagonal() {
         VectorOperations highDiag = new VectorOperations(vectors.size() - 1);
         for (int i = 1; i <= highDiag.size(); i++) {
-            highDiag.getVector().set(i, vectors.get(i).get(i + 1));
+            highDiag.set(i, vectors.get(i).get(i + 1));
         }
         return highDiag;
     }
@@ -53,7 +54,7 @@ public class TridiagonalMatrix {
     public VectorOperations getBelowDiagonal() {
         VectorOperations belowDiag = new VectorOperations(vectors.size() - 1);
         for (int i = 1; i <= belowDiag.size(); i++) {
-            belowDiag.getVector().set(i, vectors.get(i).get(i - 1));
+            belowDiag.set(i, vectors.get(i-1).get(i));
         }
         return belowDiag;
     }
